@@ -23,7 +23,7 @@ class Program
 		if (!Directory.Exists(appdata + @"\ashproject\clsudoku")) {Directory.CreateDirectory(appdata + @"\ashproject\clsudoku");}
 		if (!File.Exists(appdata + @"\ashproject\clsudoku\save.ash")) {File.WriteAllText(appdata + @"\ashproject\clsudoku\save.ash", "");}
 		
-		Console.WriteLine("CLSudoku made by Dumbelfo. Version 2.0".Pastel(Color.FromArgb(rPap, gPap, bPap)));
+		Console.WriteLine("CLSudoku made by Dumbelfo. Version 2.0.1".Pastel(Color.FromArgb(rPap, gPap, bPap)));
 		int[,] tablero = GenerarSudoku();
 		tablero = loadSudoku();
 
@@ -322,7 +322,11 @@ static bool GenerarSudokuCompleto(int[,] tablero)
 	static int[,] loadSudoku(){
 		string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 		int[,] tablero = new int[9,9];
+		if(File.Exists(appdata + @"\ashproject\clsudoku\save.ash")){
+			
+		
 		List<string> file = File.ReadLines(appdata + @"\ashproject\clsudoku\save.ash").ToList();
+		if (file.Count()!=0){
 		string[] bth = file[0].Split(";");
 		string[] bto = bth[0].Split(".");
 		string[] btn = bth[1].Split(".");
@@ -335,6 +339,12 @@ static bool GenerarSudokuCompleto(int[,] tablero)
 			for (int columna = 0; columna < 9; columna++){
 				tablero[columna,fila]= Int32.Parse(btn[(columna * 9)+fila]);
 			}
+		}
+		} else {
+			tablero = GenerarSudoku();
+		}
+		} else{
+			tablero = GenerarSudoku();
 		}
 		saveSudoku(tablero);
 		hasMadeChanges = true;
